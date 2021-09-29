@@ -1,31 +1,22 @@
-
 var currentDayEl = $('#currentDay');
 var activitiesEl = $('.activities');
-// console.log(activitiesEl.children().first().children('input').attr('id'));
-// console.log(activitiesEl.children().children('input').eq(0));
+
+
 
 function init(){
-    renderActivities();
     renderCalender();
     clearStorage();
+    renderActivities();
 }
 
-
-
+// date display on the header
 setInterval(function(){
     var rightNow = moment().format('dddd, MMMM Do YYYY');
     currentDayEl.text(rightNow);
 },1000);
 
 
-// var AmOrPm = moment().format('A');
-
-
-// current time: select the id with the time and add color attribute to the current time
-// timeNow = "10";
-
-
-// changing the background color of the hour depending whether it is in the past, present or future
+// function that change the background color of the hour depending whether it is in the past, present or future
 function renderCalender(){
     var timeNow = moment().format('k');
     console.log(timeNow);
@@ -47,7 +38,7 @@ function renderCalender(){
 }
     
 
-
+// function that gets called whenever a user saves the activity
 function saveActivities(event){
 
     // get the hour window that is selected
@@ -58,6 +49,7 @@ function saveActivities(event){
     var activity = $('#'+timeEl).val();
     console.log(activity);
 
+    // var dateNow = moment("09/27/21", "MM-DD-YY").format('dddd, MMMM Do YYYY');
     var dateNow = moment().format('dddd, MMMM Do YYYY');
 
     const activitiesData = (() => {
@@ -65,6 +57,7 @@ function saveActivities(event){
         return activities === null ? []: JSON.parse(activities);
       })();
     
+    //   add activity in the local storage
     activitiesData.push({"time":timeEl,"activity":activity, "date": dateNow})
 
     localStorage.setItem("activities", JSON.stringify(activitiesData));
@@ -72,6 +65,7 @@ function saveActivities(event){
 
 }
 
+// function to display the activities that are saved
 function renderActivities(){
     console.log('renderActivities');
     // get data from localstorage
@@ -85,7 +79,13 @@ function renderActivities(){
             var time = activities[i].time;
             console.log(activities[i].activity);
             var activity = activities[i].activity;
-            $('#'+time).val(activity);
+            var rightNow = moment().format('dddd, MMMM Do YYYY');
+            var storedDate = activities[i].date;
+            if (storedDate === rightNow){
+                // add the activity in the element based on the time window
+                $('#'+time).val(activity);
+                console.log('added');
+            }
         }
     }
 }
@@ -105,18 +105,16 @@ function clearStorage(){
             console.log(rightNow)
             var storedDate = activities[i].date;
             console.log(storedDate)
+            // check whether the activity in the local storage has today's date, and if not the activity would be removed from the local storage
             if (storedDate !== rightNow){
-                console.log(activities[i])
-                $('#'+time).val("");
-                // activities.splice(i,1);
-            }
-            
-            
+                activities.splice(i,1);
+                localStorage.setItem('activities', JSON.stringify(activities));
+            } 
         }
     }
 }
 
-
+// event listener for the save button
 activitiesEl.on('click','.saveBtn', saveActivities);
 
 init()
