@@ -30,11 +30,16 @@ THEN the saved events persist
 
 ## Features
 This calendar application includes the following features:
+- show current date and day of the calendar
+- dynamically color-code the calendar based on the time to identify past, present, and future hour(s)
+- allow user to add their activity(es) at certain time
+- allow user to see their activity(es) after refresh
 
 
 ## Mock-Up
 The following GIF displays the web application's appearance and functionality:
-![day planner demo]()
+To be added
+<!-- ![day planner demo](TBD) -->
 
 
 ## Review
